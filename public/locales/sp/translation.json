@@ -1,0 +1,10 @@
+{
+    "title": "Cómo puede ser la banca",
+    "email": "correo electrónico",
+    "mobile": "mobilenico",
+    "password": "contraseña",
+    "firstName":"Primer nombre",
+    "lastName": "Apellido",
+    "registerTitle": "Registro",
+    "loginTitle": "Iniciar sesión"
+}

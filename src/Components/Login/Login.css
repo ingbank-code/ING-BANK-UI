@@ -1,0 +1,13 @@
+
+.loginform{
+    position: relative;
+    left:35%;
+    width: 30%;
+    text-align: center;
+}
+.but{
+    background-color: orangered;
+    height: 30px;
+    width: 90px;
+    color: white;
+}

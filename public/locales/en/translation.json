@@ -1,0 +1,11 @@
+{
+    "title": "How banking can be",
+    "email": "Email",
+    "mobile": "Mobile",
+    "password": "Password",
+    "firstName":"First Name",
+    "lastName": "Last Name",
+    "registerTitle": "Register",
+    "loginTitle": "Login"
+
+}
