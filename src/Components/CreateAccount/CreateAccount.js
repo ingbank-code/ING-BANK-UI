@@ -31,15 +31,19 @@ export class CreateAccount extends Component {
 
     /* Function to handle change of input and to find bank name based on IBAN number from backend*/
     handleChange = (e) => {
+        this.setState({
+            ibanNumberError:'',
+            acccountNameError:''
+        })
         this.setState({ [e.target.id]: e.target.value }, () => {
-
-
             if (this.state.ibanNumber.length === 20) {
+
                 let user = {
                     iban: this.state.ibanNumber
                 }
                 console.log("iban", this.state.ibanNumber)
-                axios.post(`${config.ibanurl}/verify`, user)
+                if (this.state.ibanNumber.slice(0,1).match(/^[A-Z]*$/)) {
+                    axios.post(`${config.ibanurl}/verify`, user)
                     .then(res => {
                         console.log("response", res)
                         if (res.data.bankName) {
@@ -49,8 +53,18 @@ export class CreateAccount extends Component {
 
                         }
                     }).catch(err => {
-                        swal(`err.response.data.message`)
+                        swal(` ${err.response.data.message}`)
                     })
+                } else {
+
+                    this.setState(
+                        {
+                            isValid: false,
+                            ibanNumberError : "First 2 characters of IBAN number should be an alphabet"
+                        }
+                    )
+                }
+                
             }
         });
 
@@ -87,7 +101,7 @@ export class CreateAccount extends Component {
                         }
                     }).catch(err => {
                         this.setState({ loading: false })
-                        swal(`Error in adding account ${err.response.data.message}`)
+                        swal(`Error in adding account ${err.response.message}`)
                     });
                 });
             }
@@ -124,12 +138,13 @@ export class CreateAccount extends Component {
                 isValid = false
                 errors.acccountNameError = "Account name accepts only alpha numeric and '/-"
             }
-            if(this.state.ibanNumber.length ===20){
+            if (this.state.ibanNumber.length === 20) {
 
             } else {
-                isValid=false
+                isValid = false
                 errors.ibanNumberError = "IBAN number should be 20 digits"
             }
+
 
             this.setState({
                 ...this.state,
@@ -147,10 +162,10 @@ export class CreateAccount extends Component {
                 {loading ? <LoadingSpinner /> : (
                     <div className="container">
                         <h2 style={{ marginLeft: "-5%", marginTop: "1%", color: "orangered" }}>Add Favourite Account</h2>
-                        
+
                         <form id="create" style={{ marginLeft: '30%', marginTop: "5%", textAlign: "left" }} >
-                        <span className="text-danger " ><small>{this.state.ibanNumberError}</small></span>
-                        <span className="text-danger " ><small>{this.state.acccountNameError}</small></span>
+                            <span className="text-danger " ><small>{this.state.ibanNumberError}</small></span>
+                            <span className="text-danger " ><small>{this.state.acccountNameError}</small></span>
                             <div className="form-group row">
                                 <label htmlFor="accountName" className="col-sm-3 col-form-label " >Account Name</label>
                                 <div className="col-sm-4" >
