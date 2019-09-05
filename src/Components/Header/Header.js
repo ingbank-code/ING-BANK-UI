@@ -4,7 +4,7 @@ import { withTranslation } from 'react-i18next';
 
 
 class Header extends Component {
-    selectedLang = (event) => {
+    selectLang = (event) => {
         console.log(event.target.value);
         const { i18n } = this.props;
         i18n.changeLanguage(event.target.value);
@@ -25,7 +25,7 @@ class Header extends Component {
                     }
 
                     
-                    <span style={{marginLeft: "8px"}}><select className="drp"  onChange={this.selectedLang}>
+                    <span style={{marginLeft: "8px"}}><select id="select" className="drp"  onChange={this.selectLang}>
                         <option value="en">English</option>
                         <option value="sp">Spanish</option>
                         <option value="it">Italian</option>

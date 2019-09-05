@@ -1,7 +1,13 @@
 .data{
-    background-color: cyan;
-    border: 2px solid white;
+    /* border: 2px solid orange;
+    border-radius: 10px; */;
 }
 .rowfav{
     margin: 5px;
+    margin-right: 2;
+    /* height:150px; */
+    
+}
+.container{
+    margin-top:1%;
 }

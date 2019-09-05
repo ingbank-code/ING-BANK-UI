@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import './App.css';
 import { withTranslation } from 'react-i18next';
 import { withRouter, HashRouter, Switch, Route } from 'react-router-dom'
-// import Favourite from './Components/Favourite/Favourite';
+import Favourite from './Components/Favourite/Favourite';
 import Header from './Components/Header/Header'
 import Login from './Components/Login/Login';
+import CreateAccount from './Components/CreateAccount/CreateAccount';
 // import Charts from './Components/Recharts/Recharts';
 // import Home from './Components/Home/Home';
 // import Logout from './Components/Logout/Logout';
@@ -13,8 +14,8 @@ import Login from './Components/Login/Login';
 class App extends Component {
   constructor(props) {
     super(props);
-    // const { i18n } = this.props;
-    // i18n.changeLanguage('en');
+    const { i18n } = this.props;
+    i18n.changeLanguage('en');
     this.state = {
       isLoggedIn: false,
       data: {}
@@ -42,7 +43,8 @@ class App extends Component {
           <Switch>
                <Route path='/login' component={() => <Login validateUser={this.validateUser} />}></Route>
                <Route path='/' exact component={() => <Login validateUser={this.validateUser} />}></Route>
-               {/* <Route path='/favouriteAccounts' exact component={Favourite} /> */}
+               <Route path='/favouriteAccounts' exact component={Favourite} />
+               <Route path='/createAccount' exact component={CreateAccount} />
 
             {/* <Route path='/logout' component={() => <Logout validateUser={this.validateUser} />}></Route>
             <Route path='/register' exact component={Register} />
@@ -59,5 +61,5 @@ class App extends Component {
 
 }
 
-export default App
-// export default withTranslation()(App);
+//export default App
+ export default withTranslation()(App);
