@@ -33,6 +33,7 @@ export class Login extends Component {
     /* Function to handle submit button click*/
     handleSubmit=(e)=> {
         e.preventDefault()
+        this.props.history.push('/favouriteAccounts')
         this.validate().then((res) => {
             console.log("res", res)
             if (res) {
@@ -48,10 +49,7 @@ export class Login extends Component {
                             this.props.validateUser(true);
                             localStorage.setItem("customerId", this.state.customerId)
                             this.props.history.push({
-                                pathname: '/admindashboard',
-                                search: '?query=dashboard',
-                                //state:{data: response.data}
-                                state: { data: response.data.roleId }
+                                pathname: '/favouriteAccounts',
                             })
                         }
                     }).catch(err => {

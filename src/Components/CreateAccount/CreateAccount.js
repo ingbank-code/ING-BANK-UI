@@ -33,7 +33,7 @@ export class CreateAccount extends Component {
     handleChange = (e) => {
         this.setState({
             ibanNumberError:'',
-            acccountNameError:''
+            acccountNameError:'l'
         })
         this.setState({ [e.target.id]: e.target.value }, () => {
             if (this.state.ibanNumber.length === 20) {
@@ -132,11 +132,11 @@ export class CreateAccount extends Component {
 
             let pattern = new RegExp('^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$');
             console.log("patterntest", pattern.test(this.state.accountName))
-            if (pattern.test(this.state.accountName)) {
+            if (this.state.accountName===''){
 
             } else {
                 isValid = false
-                errors.acccountNameError = "Account name accepts only alpha numeric and '/-"
+                errors.acccountNameError = "Account name is mandatory"
             }
             if (this.state.ibanNumber.length === 20) {
 
