@@ -90,7 +90,7 @@ export class CreateAccount extends Component {
                 this.setState({ loading: true }, () => {
                     this.getData(account).then((response) => {
                         this.setState({ loading: false })
-                        if (response.status === 200 && response.data.status === "SUCCESS") {
+                        if (response.status === 201 ) {
                             swal(`Favourite account added succssfully`)
 
                             this.props.history.push({
