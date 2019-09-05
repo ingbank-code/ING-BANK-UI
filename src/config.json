@@ -1,10 +1,10 @@
 {
     "jsonServerUrl" : "http://10.117.189.233:9900/",
     "url": "http://13.126.77.75:8087/ingbank/api",
-    "urlCharan": "http://10.117.189.221:8087/ingbank/api",
+    "urlCharan": "http://192.168.1.108:9800/ingbank/api",
     "urlMahesh":"http://10.117.189.252:8087/ingbank/api",
     "urlPradeep":"http://10.117.189.202:8087/ingbank/api",
     "urlDhana": "http://10.117.189.214:8087/ingbank/api",
-    "urlSharath": "http://10.117.189.29:8087/ingbank/api",
-    "ibanurl": "http://10.117.189.214:8088/ibanbank/api"
+    "urlSharath": "http://192.168.1.104:8087/ingbank/api",
+    "ibanurl": "http://13.126.77.75:8088/ibanbank/api"
 }

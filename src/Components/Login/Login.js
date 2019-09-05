@@ -33,7 +33,6 @@ export class Login extends Component {
     /* Function to handle submit button click*/
     handleSubmit=(e)=> {
         e.preventDefault()
-        this.props.history.push('/favouriteAccounts')
         this.validate().then((res) => {
             console.log("res", res)
             if (res) {

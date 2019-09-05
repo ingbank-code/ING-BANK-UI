@@ -2,13 +2,13 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import swal from 'sweetalert'
 import { withTranslation } from 'react-i18next';
-import './CreateAccount.css'
+import './EditAccount.css'
 import config from '../../config.json'
 import { withRouter } from 'react-router-dom';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
 // import validate from '../../Utils/Validator'
 
-export class CreateAccount extends Component {
+export class EditAccount extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -20,20 +20,34 @@ export class CreateAccount extends Component {
             bankNameError: '',
             isValid: false,
             alert: null,
-            loading: false
+            loading: false,
+            createdOn: ''
         }
         console.log("props of login constructor", this.props)
         this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleEdit = this.handleEdit.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
 
     }
-
+    componentDidMount(){
+        console.log(this.props.location.state.detail)
+        if(this.props.location.state.detail){
+            let {accountName, ibannumber, bankName, date} = this.props.location.state.detail
+            this.setState({
+                accountName: accountName,
+                bankName: bankName,
+                ibanNumber: ibannumber,
+                createdOn: date
+                
+            })
+        }
+    }
     /* Function to handle change of input and to find bank name based on IBAN number from backend*/
     handleChange = (e) => {
         this.setState({
             ibanNumberError:'',
-            acccountNameError:'l'
+            acccountNameError:''
         })
         this.setState({ [e.target.id]: e.target.value }, () => {
             if (this.state.ibanNumber.length === 20) {
@@ -69,42 +83,66 @@ export class CreateAccount extends Component {
         });
 
     }
+    /* Function to handle cancel button click*/
     handleCancel = (e) => {
         document.getElementById("create").reset();
     }
-    /* Function to handle submit button click*/
-    handleSubmit = (e) => {
 
+    /* Function to handle edit button click*/
+    handleEdit = (e) => {
         e.preventDefault()
+        console.log("Inside handle edit")
         let customerId = localStorage.getItem('customerId')
         this.validate().then((res) => {
-            console.log("res", res)
-            if (res) {
-                const { accountName, ibanNumber, bankName } = this.state
+            console.log("res inside edit", res)
+                const { ibanNumber,bankName, accountName , createdOn} = this.state
                 const account = {
+                    ibannumber: ibanNumber,
                     accountName: accountName,
-                    accountNumber: ibanNumber,
                     bankName: bankName,
-                    customerId: customerId
+                    createdOn: createdOn,
+                    accountId: customerId
                 };
                 this.setState({ loading: true }, () => {
-                    this.getData(account).then((response) => {
+                    axios.put(`${config.url}/accounts`, account)
+                    .then(res => {
                         this.setState({ loading: false })
-                        if (response.status === 201 ) {
-                            swal(`Favourite account added succssfully`)
-
-                            this.props.history.push({
-                                pathname: '/favouriteAccounts',
-                                search: '?query=dashboard',
-                                //state:{data: response.data}
-                            })
-                        }
+                            if (res.status === 200 ) {
+                                swal(`Favourite account edited successfully`)
+                                this.props.history.push({
+                                    pathname: '/favouriteAccounts',
+                                    //state:{data: response.data}
+                                })
+                            }
                     }).catch(err => {
-                        this.setState({ loading: false })
-                        swal(`Error in adding account ${err.response.message}`)
-                    });
+                        swal(`${err.response.data.message}`)
+                    })
                 });
-            }
+            
+        });
+    }   
+    /* Function to handle delete button click*/
+    handleDelete = (e) => {
+        e.preventDefault()
+        console.log("Inside handle Delete")
+        let customerId = localStorage.getItem('customerId')
+                const { ibanNumber } = this.state
+              
+                this.setState({ loading: true }, () => {
+                    axios.delete(`${config.url}/accounts/${customerId}/${ibanNumber}`)
+                    .then(res => {
+                        this.setState({ loading: false })
+                            if (res.status === 200 ) {
+                                swal(`Favourite account deleted successfully`)
+                                this.props.history.push({
+                                    pathname: '/favouriteAccounts',
+                                    //state:{data: response.data}
+                                })
+                            }
+                    }).catch(err => {
+                        swal(`${err.response.data.message}`)
+                    })
+           
         });
     }
 
@@ -132,13 +170,19 @@ export class CreateAccount extends Component {
             let pattern = new RegExp('^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$');
             console.log("patterntest", pattern.test(this.state.accountName))
            
-            if (this.state.ibanNumber.length === 20) {
+            // if (this.state.ibanNumber.length === 20) {
+
+            // } else {
+            //     isValid = false
+            //     errors.ibanNumberError = "IBAN number should be 20 digits"
+            // }
+
+            if (this.state.accountName.length <1 ) {
 
             } else {
                 isValid = false
-                errors.ibanNumberError = "IBAN number should be 20 digits"
+                errors.accountNameError= "Account Name is mandatory"
             }
-
 
             this.setState({
                 ...this.state,
@@ -155,7 +199,7 @@ export class CreateAccount extends Component {
             <div>
                 {loading ? <LoadingSpinner /> : (
                     <div className="container">
-                        <h2 style={{ marginLeft: "-5%", marginTop: "1%", color: "orangered" }}>Add Favourite Account</h2>
+                        <h2 style={{ marginLeft: "-5%", marginTop: "1%", color: "orangered" }}>Edit Favourite Account</h2>
 
                         <form id="create" style={{ marginLeft: '30%', marginTop: "5%", textAlign: "left" }} >
                             <span className="text-danger " ><small>{this.state.ibanNumberError}</small></span>
@@ -168,6 +212,7 @@ export class CreateAccount extends Component {
                                         className="form-control"
                                         id="accountName"
                                         placeholder="Enter account name"
+                                        value={this.state.accountName}
                                         onChange={this.handleChange} />
                                 </div>
                             </div>
@@ -179,6 +224,7 @@ export class CreateAccount extends Component {
                                         className="form-control"
                                         id="ibanNumber"
                                         placeholder="Enter IBAN number"
+                                        value={this.state.ibanNumber}
                                         onChange={this.handleChange} />
                                 </div>
                             </div>
@@ -190,15 +236,18 @@ export class CreateAccount extends Component {
                                         className="form-control"
                                         id="bankName"
                                         value={this.state.bankName}
-                                        disabled />
+                                        onChange={this.handleChange}
+                                        disabled
+                                         />
                                 </div>
                             </div>
                             <br></br>
                             <div className="form-group row">
                                 <div className="col-sm-4 offset-sm-2">
                                     <div class="btn-group" role="group" aria-label="Basic example">
-                                        <button id="savebutton" onClick={this.handleSubmit} type="button" class="btn btn-primary">Save</button>
-                                        <button id="cancelbutton" onClick={this.handleCancel} type="button" style={{ marginLeft: "2%" }} class="btn btn-secondary">Cancel</button>
+                                        <button id="savebutton" onClick={this.handleEdit} type="button" class="btn btn-primary">Save</button>
+                                        <button id="deletebutton" onClick={this.handleDelete} type="button" style={{ marginLeft: "2%" }} className="btn btn-primary">Delete</button>
+                                        <button id="cancelbutton" onClick={this.handleCancel} type="button" style={{ marginLeft: "2%" }} className="btn btn-secondary">Cancel</button>
                                     </div>
                                 </div>
                             </div>
@@ -214,4 +263,4 @@ export class CreateAccount extends Component {
 }
 //export default Login
 // export default withRouter(Login)
-export default CreateAccount
+export default EditAccount

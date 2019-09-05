@@ -18,11 +18,11 @@ class Header extends Component {
                     <img src="https://static.puzzlefactory.pl/puzzle/189/950/original.jpg" alt='not found' width="200px" height="100px" />
                         {/* <span className='' style={{ color: '#fff', fontSize: '30px', margin: '15%',fontStyle: 'italic' }}> {t('title')} </span> */}
                         <span className='' style={{ color: '#fff', fontSize: '30px', margin: '15%',fontStyle: 'italic' }}> ING bank-How banking can be </span>
-                    {
+                    {/* {
                         this.props.isLoggedIn ?
                             <span ><button className="bt" onClick={() => this.props.redirect('/logout', this.props.history)} data-toggle="tooltip" title="Logout" >Logout</button></span> :
                             <span><button className="bt" onClick={() => this.props.redirect('/login', this.props.history)} data-toggle="tooltip" title="Login" >Login</button></span>
-                    }
+                    } */}
 
                     
                     <span style={{marginLeft: "8px"}}><select id="select" className="drp"  onChange={this.selectLang}>
